@@ -10,3 +10,48 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+model User {
+  id                     String    @id @default(ulid()) @db.Char(26)
+  firstName              String    @db.VarChar(128)
+  middleName             String    @db.VarChar(128)
+  lastName               String    @db.VarChar(128)
+  email                  String    @unique @db.VarChar(128)
+  phoneNumber            String    @unique @db.VarChar(128)
+  dob                    DateTime  @db.Date
+  gender                 Gender
+  isOnline               Boolean   @default(false)
+  emailVerifiedAt        DateTime?
+  password               String    @db.Text
+  rememberToken          String?   @db.Text
+  lockOutUntil           DateTime?
+  failedLoginAttempts    Int       @default(0)
+  isActive               Boolean   @default(true)
+  twoFactorSecret        String?   @db.Text
+  twoFactorRecoveryCodes String?   @db.Text
+  twoFactorConfirmedAt   DateTime?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("users")
+  reservations Reservation[]
+}
+
+enum Gender {
+  male
+  female
+}
+
+
+model Reservation {
+    id String @id @default(ulid()) @db.Char(26)
+    startDate DateTime
+    endDAte DateTime
+    userId String
+    user User @relation(fields: [userId], references: [id])
+    placeId String
+    invoiceId String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+}

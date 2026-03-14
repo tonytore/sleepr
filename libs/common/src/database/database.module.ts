@@ -11,7 +11,6 @@ import { ConfigModule } from '../config/config.module';
 @Module({
   imports: [
     ConfigModule,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     PrismaModule.forRootAsync({
       isGlobal: true,
       useFactory: (configService: ConfigService<RootConfig>) => ({
@@ -19,7 +18,7 @@ import { ConfigModule } from '../config/config.module';
           adapter: new PrismaPg(
             new Pool({
               connectionString:
-                configService.get<DatabaseConfig>('database')?.url,
+                configService.getOrThrow<DatabaseConfig>('database')?.url,
             }),
           ),
           // omit: {

@@ -1,0 +1,13 @@
+###
+GET http://localhost:3000/reservations
+
+###
+POST http://localhost:3000/reservations
+Content-Type: application/json
+
+{
+    "startDate": "2026-03-13T00:00:00.000Z",
+    "endDAte": "2026-03-13T00:00:00.000Z",
+    "placeId": "ffsdfds",
+    "invoiceId": "sfdfdfdsfdsf"
+}

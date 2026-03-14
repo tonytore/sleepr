@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
-import * as joi from 'joi';
+import { DatabaseValidation } from './validation/database.validation';
+import databaseConfig from './database.config';
+import appConfig from './app.config';
 
 @Module({
   imports: [
     NestConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: joi.object({
-        DATABASE_URL: joi.string().required(),
-      }),
+      load: [databaseConfig, appConfig],
+      validationSchema: DatabaseValidation,
     }),
   ],
 })

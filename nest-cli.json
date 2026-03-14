@@ -25,7 +25,7 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/sleeper/tsconfig.app.json"
+    "tsConfigPath": "apps/reservations/tsconfig.app.json"
   },
   "monorepo": true,
   "root": "apps/reservations"
