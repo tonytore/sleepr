@@ -1,0 +1,14 @@
+model AgencyCandidate {
+  id                String @id @default(ulid())
+  agencyCandidateId String
+  agencyId          String
+
+  agencyCandidate User @relation("agencyCandidate", fields: [agencyCandidateId], references: [id])
+  agency          User @relation("agency", fields: [agencyId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("agency_candidates")
+}

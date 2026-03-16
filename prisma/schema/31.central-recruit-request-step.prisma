@@ -1,0 +1,36 @@
+model CentralRecruitRequestStep {
+  id                      String                          @id @default(ulid())
+  status                  CentralRecruitRequestStepStatus
+  remark                  String                          @db.Text
+  type                    RequestStepType
+  weight                  Float
+  step                    Int
+  centralRecruitRequestId String
+  userId                  String
+
+  centralRecruitRequest CentralRecruitRequest @relation(fields: [centralRecruitRequestId], references: [id])
+  user                  User                  @relation(fields: [userId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  centralRecruitAssessmentRequests CentralRecruitAssessmentRequest?
+
+  @@map("central_recruit_request_steps")
+}
+
+enum CentralRecruitRequestStepStatus {
+  REQUESTED
+  REQUEST_UPDATED
+  APPROVED
+  DECLINED
+  AGREEMENT_CREATED
+  AGREEMENT_SENT
+  APPLICANT_FILLED_OUT
+  VACANCY_CREATED
+  VACANCY_UPDATED
+  PAYMENT_RECEPT_RECEIVED
+  ASSESSMENT_CREATED
+  ASSESSMENT_UPDATED
+}

@@ -1,0 +1,17 @@
+model ThirdPartyAssessmentSchedule {
+  id                     String   @id @default(ulid())
+  address                String   @db.Text
+  instructions           Json
+  scheduledAt            DateTime @db.Date
+  competencyAssessmentId String   @unique
+  thirdPartyId           String
+
+  thirdParty           User                 @relation(fields: [thirdPartyId], references: [id])
+  competencyAssessment CompetencyAssessment @relation(fields: [competencyAssessmentId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("third_party_assessment_schedules")
+}

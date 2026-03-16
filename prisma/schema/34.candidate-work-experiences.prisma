@@ -1,0 +1,26 @@
+model CandidateWorkExperience {
+  id                        String         @id @default(ulid())
+  organizationName          String         @db.VarChar(255)
+  position                  String         @db.VarChar(255)
+  employmentType            EmploymentType
+  startDate                 DateTime       @db.Date
+  endDate                   DateTime?      @db.Date
+  isCurrent                 Boolean        @default(false)
+  vacancyCandidateProfileId String
+
+  vacancyCandidateProfile VacancyCandidateProfile @relation(fields: [vacancyCandidateProfileId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("candidate_work_experiences")
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  TEMPORARY
+  INTERNSHIP
+}

@@ -1,0 +1,31 @@
+model CompetencyAssessment {
+  id                      String   @id @default(ulid())
+  title                   String   @db.VarChar(255)
+  description             String   @db.Text
+  numberOfQuestions       Int
+  passPointTechnical      Int
+  passPointBehavioral     Int
+  passPointThirdParty     Int
+  price                   Float
+  assessmentInstructions  Json
+  scheduledAt             DateTime @db.Date
+  haveThirdParty          Boolean
+  agreementTemplateId     String
+  requestId               String
+  centralRecruitRequestId String
+
+  agreementTemplate     AgreementTemplate     @relation(fields: [agreementTemplateId], references: [id])
+  request               Request               @relation(fields: [requestId], references: [id])
+  centralRecruitRequest CentralRecruitRequest @relation(fields: [centralRecruitRequestId], references: [id])
+
+  createdAt                      DateTime                        @default(now())
+  updatedAt                      DateTime                        @updatedAt
+  deletedAt                      DateTime?
+  competencyAssessmentThirdParty CompetencyAssessmentThirdParty?
+  questions                      CompetencyAssessmentQuestion[]
+  thirdPartyAssessmentSchedules  ThirdPartyAssessmentSchedule?
+  competencyAssessmentResults    CompetencyAssessmentResult[]
+  candidateAssessmentTrackers    CandidateAssessmentTracker[]
+
+  @@map("competency_assessments")
+}

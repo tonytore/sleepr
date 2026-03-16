@@ -1,0 +1,18 @@
+model RequestCandidate {
+  id          String @id @default(ulid())
+  requestId   String
+  candidateId String
+
+  request   Request @relation(fields: [requestId], references: [id])
+  candidate User    @relation(fields: [candidateId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  resultThirdParties CompetencyAssessmentResultThirdParty[]
+  assessmentResults  CompetencyAssessmentResult[]
+  assessmentTrackers CandidateAssessmentTracker[]
+
+  @@map("request_candidates")
+}

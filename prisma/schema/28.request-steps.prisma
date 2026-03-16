@@ -1,0 +1,41 @@
+model RequestStep {
+  id        String            @id @default(ulid())
+  status    RequestStepStatus
+  remark    String            @db.Text
+  type      RequestStepType
+  weight    Float
+  step      Int
+  requestId String
+  userId    String
+
+  request Request @relation(fields: [requestId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  assessmentRequests AssessmentRequest?
+
+  @@map("request_steps")
+}
+
+enum RequestStepStatus {
+  REQUESTED
+  REQUEST_UPDATED
+  APPROVED
+  DECLINED
+  CANDIDATE_ADDED
+  CANDIDATE_UPDATED
+  AGREEMENT_CREATED
+  AGREEMENT_SENT
+  PAYMENT_RECEPT_RECEIVED
+  ASSESSMENT_CREATED
+  ASSESSMENT_UPDATED
+}
+
+enum RequestStepType {
+  GOOD
+  NORMAL
+  BAD
+}

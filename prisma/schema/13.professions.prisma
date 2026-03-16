@@ -1,0 +1,21 @@
+model Profession {
+  id                     String  @id @default(ulid())
+  name                   String  @unique @db.VarChar(255)
+  description            String? @db.Text
+  code                   String  @unique @db.VarChar(255)
+  level                  String  @db.VarChar(255)
+  subMajorCareerFamilyId String
+
+  subMajorCareerFamily SubMajorCareerFamily @relation(fields: [subMajorCareerFamilyId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  questions              Question[]
+  requests               Request[]
+  centralRecruitRequests CentralRecruitRequest[]
+  questionEntrySchedules QuestionEntrySchedule[]
+
+  @@map("professions")
+}

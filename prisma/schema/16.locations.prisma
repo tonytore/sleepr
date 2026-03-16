@@ -1,0 +1,11 @@
+model Location {
+  id          String  @id @default(ulid())
+  name        String  @unique @db.VarChar(255)
+  description String? @db.Text
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("locations")
+}

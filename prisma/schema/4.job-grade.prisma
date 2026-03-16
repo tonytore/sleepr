@@ -1,0 +1,14 @@
+model JobGrade {
+  id          String  @id @default(ulid())
+  grade       Int     @unique @db.Integer
+  name        String  @unique @db.VarChar(128)
+  description String? @db.Text
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  competencyLevelJobGrades CompetencyLevelJobGrade[]
+
+  @@map("job_grades")
+}

@@ -1,0 +1,13 @@
+model AgreementTemplate {
+  id      String @id @default(ulid())
+  name    String @unique @db.VarChar(255)
+  content Json
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  competencyAssessments CompetencyAssessment[]
+
+  @@map("agreement_templates")
+}

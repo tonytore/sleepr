@@ -1,0 +1,12 @@
+model QuestionAnswer {
+  id     String @id @default(ulid())
+  answer Json
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  questions Question[]
+
+  @@map("question_answers")
+}

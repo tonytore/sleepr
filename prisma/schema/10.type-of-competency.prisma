@@ -1,0 +1,14 @@
+model TypeOfCompetency {
+  id          String  @id @default(ulid())
+  name        String  @unique @db.VarChar(255)
+  description String? @db.Text
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  questions                               Question[]
+  questionEntryScheduleTypeOfCompetencies QuestionEntryScheduleTypeOfCompetency[]
+
+  @@map("type_of_competencies")
+}

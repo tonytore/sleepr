@@ -2,8 +2,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
 import basicAuth from 'express-basic-auth';
 
-import packageJson from '../../../../package.json';
-
 import type { INestApplication } from '@nestjs/common';
 
 /**
@@ -23,7 +21,7 @@ export function createDocument(
     .setDescription(
       `The PSCMS API provides a set of RESTful endpoints that enable clients to interact with the PSCMS System. It is designed to be secure, scalable, and easy to integrate, supporting modern frontend and mobile applications. The API follows REST principles, uses JSON for request and response payloads.`,
     )
-    .setVersion(packageJson.version)
+    .setVersion('0.0.1')
     .addBearerAuth()
     .addCookieAuth('accessToken')
     .addSecurityRequirements('bearer')

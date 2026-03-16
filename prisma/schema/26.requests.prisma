@@ -1,0 +1,34 @@
+model Request {
+  id                               String @id @default(ulid())
+  numberOfCompetitors              Int
+  paymentReceipt                   String @db.Text
+  majorCareerFamilyId              String
+  subMajorCareerFamilyId           String
+  professionId                     String
+  fromCompetencyLevelId            String
+  toCompetencyLevelId              String
+  fromCompetencyLevelJobGradeId    String
+  toCompetencyLevelJobGradeId      String
+  assessmentServiceRequestOptionId String
+  assessmentRequestId              String
+
+  assessmentRequest              AssessmentRequest              @relation(fields: [assessmentRequestId], references: [id])
+  majorCareerFamily              MajorCareerFamily              @relation(fields: [majorCareerFamilyId], references: [id])
+  subMajorCareerFamily           SubMajorCareerFamily           @relation(fields: [subMajorCareerFamilyId], references: [id])
+  profession                     Profession                     @relation(fields: [professionId], references: [id])
+  fromCompetencyLevel            CompetencyLevel                @relation("from", fields: [fromCompetencyLevelId], references: [id])
+  toCompetencyLevel              CompetencyLevel                @relation("to", fields: [toCompetencyLevelId], references: [id])
+  fromCompetencyLevelJobGrade    CompetencyLevelJobGrade        @relation("from", fields: [fromCompetencyLevelJobGradeId], references: [id])
+  toCompetencyLevelJobGrade      CompetencyLevelJobGrade        @relation("to", fields: [toCompetencyLevelJobGradeId], references: [id])
+  assessmentServiceRequestOption AssessmentServiceRequestOption @relation(fields: [assessmentServiceRequestOptionId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  candidates            RequestCandidate[]
+  steps                 RequestStep[]
+  competencyAssessments CompetencyAssessment[]
+
+  @@map("requests")
+}

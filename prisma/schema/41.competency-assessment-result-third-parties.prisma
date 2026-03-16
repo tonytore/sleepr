@@ -1,0 +1,16 @@
+model CompetencyAssessmentResultThirdParty {
+  id                               String @id @default(ulid())
+  score                            Float
+  description                      String @db.Text
+  competencyAssessmentThirdPartyId String @unique
+  requestCandidateId               String
+
+  competencyAssessmentThirdParty CompetencyAssessmentThirdParty @relation(fields: [competencyAssessmentThirdPartyId], references: [id])
+  candidate                      RequestCandidate               @relation(fields: [requestCandidateId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("competency_assessment_result_third_parties")
+}

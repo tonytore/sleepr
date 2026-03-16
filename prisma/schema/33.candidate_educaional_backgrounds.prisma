@@ -1,0 +1,19 @@
+model CandidateEducationalBackground {
+  id                         String   @id @default(ulid())
+  instituteName              String   @db.VarChar(255)
+  startDate                  DateTime @db.Date
+  endDate                    DateTime @db.Date
+  certificateDocumentPath    String?
+  educationalQualificationId String
+  vacancyCandidateProfileId  String
+
+  vacancyCandidateProfile VacancyCandidateProfile @relation(fields: [vacancyCandidateProfileId], references: [id])
+
+  educationalQualification EducationalQualification @relation(fields: [educationalQualificationId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("candidate_educational_backgrounds")
+}

@@ -1,0 +1,42 @@
+model CompetencyLevel {
+  id              String  @id @default(ulid())
+  competencyLevel String  @unique @db.VarChar(128)
+  description     String? @db.Text
+  jobCategoryId   String
+
+  jobCategory JobCategory @relation(fields: [jobCategoryId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  jobGrades              CompetencyLevelJobGrade[]
+  fromRequests           Request[]                 @relation("from")
+  toRequests             Request[]                 @relation("to")
+  centralRecruitRequests CentralRecruitRequest[]
+  vacancyProfiles        VacancyCandidateProfile[]
+
+  @@map("competency_levels")
+}
+
+model CompetencyLevelJobGrade {
+  id                String @id @default(ulid())
+  competencyLevelId String
+  jobGradeId        String
+
+  competencyLevel CompetencyLevel @relation(fields: [competencyLevelId], references: [id])
+  jobGrade        JobGrade        @relation(fields: [jobGradeId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  questions              Question[]
+  fromRequests           Request[]                 @relation("from")
+  toRequests             Request[]                 @relation("to")
+  centralRecruitRequests CentralRecruitRequest[]
+  vacancyProfiles        VacancyCandidateProfile[]
+  questionEntrySchedules QuestionEntrySchedule[]
+
+  @@map("competency_level_job_grades")
+}

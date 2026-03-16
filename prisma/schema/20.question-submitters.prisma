@@ -1,0 +1,27 @@
+model QuestionSubmitter {
+  id                                                       String                  @id @default(ulid())
+  numberOfQuestions                                        Int
+  userId                                                   String
+  questionEntryScheduleId                                  String
+  questionEntryScheduleTypeOfCompetencyLevelOfDifficultyId String
+  status                                                   QuestionSubmitterStatus @default(OPEN)
+
+  user                              User                                                   @relation(fields: [userId], references: [id])
+  questionEntrySchedule             QuestionEntrySchedule                                  @relation(fields: [questionEntryScheduleId], references: [id])
+  typeOfCompetencyLevelOfDifficulty QuestionEntryScheduleTypeOfCompetencyLevelOfDifficulty @relation(fields: [questionEntryScheduleTypeOfCompetencyLevelOfDifficultyId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  questionReviewers QuestionReviewer[]
+  questions         Question[]
+
+  @@map("question_submitters")
+}
+
+enum QuestionSubmitterStatus {
+  OPEN
+  CLOSED
+  REOPEN_FAILED_REVIEW
+}

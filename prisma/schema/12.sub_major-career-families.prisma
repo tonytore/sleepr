@@ -1,0 +1,18 @@
+model SubMajorCareerFamily {
+  id                  String  @id @default(ulid())
+  name                String  @unique @db.VarChar(255)
+  description         String? @db.Text
+  code                String  @unique @db.VarChar(255)
+  majorCareerFamilyId String
+
+  majorCareerFamily MajorCareerFamily @relation(fields: [majorCareerFamilyId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  professions Profession[]
+  requests    Request[]
+
+  @@map("sub_major_career_families")
+}

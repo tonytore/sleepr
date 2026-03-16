@@ -1,0 +1,16 @@
+model QuestionEntryScheduleTypeOfCompetency {
+  id                      String @id @default(ulid())
+  numberOfQuestions       Int
+  typeOfCompetencyId      String
+  questionEntryScheduleId String
+
+  typeOfCompetency      TypeOfCompetency      @relation(fields: [typeOfCompetencyId], references: [id])
+  questionEntrySchedule QuestionEntrySchedule @relation(fields: [questionEntryScheduleId], references: [id])
+
+  createdAt           DateTime                                                 @default(now())
+  updatedAt           DateTime                                                 @updatedAt
+  deletedAt           DateTime?
+  levelOfDifficulties QuestionEntryScheduleTypeOfCompetencyLevelOfDifficulty[]
+
+  @@map("question_entry_schedule_type_of_competencies")
+}

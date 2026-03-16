@@ -1,0 +1,18 @@
+model QuestionEntryScheduleTypeOfCompetencyLevelOfDifficulty {
+  id                                      String @id @default(ulid())
+  numberOfQuestions                       Int
+  levelOfDifficultyId                     String
+  questionEntryScheduleTypeOfCompetencyId String
+
+  levelOfDifficulty LevelOfDifficulty @relation(fields: [levelOfDifficultyId], references: [id], map: "qes_toc_lod_diff_fkey")
+
+  scheduleTypeOfCompetency QuestionEntryScheduleTypeOfCompetency @relation(fields: [questionEntryScheduleTypeOfCompetencyId], references: [id], map: "qes_toc_lod_sched_fkey")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  questionSubmitters QuestionSubmitter[]
+
+  @@map("question_entry_schedule_type_of_competencies_level_of_difficulties")
+}

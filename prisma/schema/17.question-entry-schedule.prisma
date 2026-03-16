@@ -1,0 +1,27 @@
+model QuestionEntrySchedule {
+  id                           String                      @id @default(ulid())
+  totalNumberQuestionToBeAdded Int
+  competencyLevelJobGradeId    String
+  professionId                 String
+  status                       QuestionEntryScheduleStatus @default(OPEN)
+  description                  Json?
+
+  competencyLevelJobGrade CompetencyLevelJobGrade @relation(fields: [competencyLevelJobGradeId], references: [id])
+  profession              Profession              @relation(fields: [professionId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  typeOfCompetencies QuestionEntryScheduleTypeOfCompetency[]
+  questionSubmitters QuestionSubmitter[]
+  questionReviewers  QuestionReviewer[]
+  questions          Question[]
+
+  @@map("question_entry_schedules")
+}
+
+enum QuestionEntryScheduleStatus {
+  OPEN
+  CLOSED
+}

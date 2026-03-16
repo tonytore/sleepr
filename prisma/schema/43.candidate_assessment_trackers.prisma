@@ -1,0 +1,20 @@
+model CandidateAssessmentTracker {
+  id                     String    @id @default(ulid())
+  startedAt              DateTime
+  currentTime            DateTime
+  endedAt                DateTime?
+  hasGivenAnswer         Boolean   @default(false)
+  hasCompletedAssessment Boolean   @default(false)
+
+  competencyAssessmentId String
+  requestCandidateId     String
+
+  competencyAssessment CompetencyAssessment @relation(fields: [competencyAssessmentId], references: [id])
+  candidate            RequestCandidate     @relation(fields: [requestCandidateId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("candidate_assessment_trackers")
+}

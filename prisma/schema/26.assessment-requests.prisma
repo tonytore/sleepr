@@ -1,0 +1,18 @@
+model AssessmentRequest {
+  id            String @id @default(ulid())
+  subject       String @db.VarChar(500)
+  description   String @db.Text
+  userId        String
+  currentStepId String @unique
+
+  user        User        @relation(fields: [userId], references: [id])
+  currentStep RequestStep @relation(fields: [currentStepId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  requests Request[]
+
+  @@map("assessment_requests")
+}

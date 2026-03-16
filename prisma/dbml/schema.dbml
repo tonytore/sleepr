@@ -1,0 +1,1054 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table roles {
+  id String [pk]
+  name String [unique, not null]
+  displayName String
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  permissions role_permissions [not null]
+  users user_roles [not null]
+}
+
+Table resources {
+  id String [pk]
+  name String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  permissions permissions [not null]
+}
+
+Table actions {
+  id String [pk]
+  name String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  permissions permissions [not null]
+}
+
+Table permissions {
+  id String [pk]
+  resourceId String [not null]
+  actionId String [not null]
+  resource resources [not null]
+  action actions [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  roles role_permissions [not null]
+
+  indexes {
+    (resourceId, actionId) [unique]
+  }
+}
+
+Table role_permissions {
+  roleId String [not null]
+  permissionId String [not null]
+  role roles [not null]
+  permission permissions [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+
+  indexes {
+    (roleId, permissionId) [pk]
+    (roleId, permissionId) [unique]
+  }
+}
+
+Table user_roles {
+  userId String [not null]
+  roleId String [not null]
+  user users [not null]
+  role roles [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+
+  indexes {
+    (userId, roleId) [pk]
+    (userId, roleId) [unique]
+  }
+}
+
+Table type_of_competencies {
+  id String [pk]
+  name String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  questions questions [not null]
+  questionEntryScheduleTypeOfCompetencies question_entry_schedule_type_of_competencies [not null]
+}
+
+Table major_career_families {
+  id String [pk]
+  name String [unique, not null]
+  description String
+  code String [unique, not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  subFamilies sub_major_career_families [not null]
+  requests requests [not null]
+}
+
+Table sub_major_career_families {
+  id String [pk]
+  name String [unique, not null]
+  description String
+  code String [unique, not null]
+  majorCareerFamilyId String [not null]
+  majorCareerFamily major_career_families [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  professions professions [not null]
+  requests requests [not null]
+}
+
+Table professions {
+  id String [pk]
+  name String [unique, not null]
+  description String
+  code String [unique, not null]
+  level String [not null]
+  subMajorCareerFamilyId String [not null]
+  subMajorCareerFamily sub_major_career_families [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  questions questions [not null]
+  requests requests [not null]
+  centralRecruitRequests central_recruit_requests [not null]
+  questionEntrySchedules question_entry_schedules [not null]
+}
+
+Table level_of_difficulties {
+  id String [pk]
+  name String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  questions questions [not null]
+  questionEntryScheduleTypeOfCompetencyLevelOfDifficulties question_entry_schedule_type_of_competencies_level_of_difficulties [not null]
+}
+
+Table agreement_templates {
+  id String [pk]
+  name String [unique, not null]
+  content Json [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  competencyAssessments competency_assessments [not null]
+}
+
+Table locations {
+  id String [pk]
+  name String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table question_entry_schedules {
+  id String [pk]
+  totalNumberQuestionToBeAdded Int [not null]
+  competencyLevelJobGradeId String [not null]
+  professionId String [not null]
+  status QuestionEntryScheduleStatus [not null, default: 'OPEN']
+  description Json
+  competencyLevelJobGrade competency_level_job_grades [not null]
+  profession professions [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  typeOfCompetencies question_entry_schedule_type_of_competencies [not null]
+  questionSubmitters question_submitters [not null]
+  questionReviewers question_reviewers [not null]
+  questions questions [not null]
+}
+
+Table question_entry_schedule_type_of_competencies {
+  id String [pk]
+  numberOfQuestions Int [not null]
+  typeOfCompetencyId String [not null]
+  questionEntryScheduleId String [not null]
+  typeOfCompetency type_of_competencies [not null]
+  questionEntrySchedule question_entry_schedules [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  levelOfDifficulties question_entry_schedule_type_of_competencies_level_of_difficulties [not null]
+}
+
+Table question_entry_schedule_type_of_competencies_level_of_difficulties {
+  id String [pk]
+  numberOfQuestions Int [not null]
+  levelOfDifficultyId String [not null]
+  questionEntryScheduleTypeOfCompetencyId String [not null]
+  levelOfDifficulty level_of_difficulties [not null]
+  scheduleTypeOfCompetency question_entry_schedule_type_of_competencies [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  questionSubmitters question_submitters [not null]
+}
+
+Table users {
+  id String [pk]
+  firstName String [not null]
+  middleName String [not null]
+  lastName String [not null]
+  email String [unique, not null]
+  phoneNumber String [unique, not null]
+  dob DateTime [not null]
+  gender Gender [not null]
+  isOnline Boolean [not null, default: false]
+  emailVerifiedAt DateTime
+  password String [not null]
+  rememberToken String
+  lockOutUntil DateTime
+  failedLoginAttempts Int [not null, default: 0]
+  isActive Boolean [not null, default: true]
+  twoFactorSecret String
+  twoFactorRecoveryCodes String
+  twoFactorConfirmedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  refreshTokens refresh_tokens [not null]
+  roles user_roles [not null]
+  assessmentRequests assessment_requests [not null]
+  centralRecruitAssessmentRequests central_recruit_assessment_requests [not null]
+  requestSteps request_steps [not null]
+  centralRecruitRequestSteps central_recruit_request_steps [not null]
+  requestCandidates request_candidates [not null]
+  agencyCandidates agency_candidates [not null]
+  agencies agency_candidates [not null]
+  vacancyProfiles vacancy_candidate_profiles [not null]
+  thirdParties competency_assessment_third_parties [not null]
+  thirdPartyAssessmentSchedules third_party_assessment_schedules [not null]
+  questionSubmitters question_submitters [not null]
+  questionReviewers question_reviewers [not null]
+  reservations reservations [not null]
+}
+
+Table question_submitters {
+  id String [pk]
+  numberOfQuestions Int [not null]
+  userId String [not null]
+  questionEntryScheduleId String [not null]
+  questionEntryScheduleTypeOfCompetencyLevelOfDifficultyId String [not null]
+  status QuestionSubmitterStatus [not null, default: 'OPEN']
+  user users [not null]
+  questionEntrySchedule question_entry_schedules [not null]
+  typeOfCompetencyLevelOfDifficulty question_entry_schedule_type_of_competencies_level_of_difficulties [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  questionReviewers question_reviewers [not null]
+  questions questions [not null]
+}
+
+Table question_reviewers {
+  id String [pk]
+  userId String [not null]
+  questionSubmitterId String [not null]
+  questionEntryScheduleId String [not null]
+  numberOfQuestions Int [not null]
+  status QuestionReviewerStatus [not null, default: 'CLOSED']
+  user users [not null]
+  questionEntrySchedule question_entry_schedules [not null]
+  questionSubmitter question_submitters [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  questions questions [not null]
+}
+
+Table questions {
+  id String [pk]
+  question Json [not null]
+  questionHash String [unique, not null]
+  timeLimit Int [not null]
+  status QuestionStatus [not null, default: 'PENDING_REVIEW']
+  competencyLevelJobGradeId String [not null]
+  professionId String [not null]
+  typeOfCompetencyId String [not null]
+  levelOfDifficultyId String [not null]
+  answerId String [not null]
+  questionSubmitterId String [not null]
+  questionReviewerId String [not null]
+  questionEntryScheduleId String [not null]
+  competencyLevelJobGrade competency_level_job_grades [not null]
+  profession professions [not null]
+  typeOfCompetency type_of_competencies [not null]
+  levelOfDifficulty level_of_difficulties [not null]
+  answer question_answers [not null]
+  questionSubmitter question_submitters [not null]
+  questionReviewer question_reviewers [not null]
+  questionEntrySchedule question_entry_schedules [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  options question_options [not null]
+  competencyAssessmentQuestions competency_assessment_questions [not null]
+  reviews question_reviews [not null]
+}
+
+Table question_reviews {
+  id String [pk]
+  questionId String [not null]
+  reviewerType ReviewerType [not null, default: 'AI']
+  reviewResult ReviewResult [not null]
+  reviewResultNote String [not null]
+  question questions [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table question_options {
+  id String [pk]
+  option Json [not null]
+  optionHash String [not null]
+  questionId String [not null]
+  question questions [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+
+  indexes {
+    (questionId, optionHash) [unique]
+  }
+}
+
+Table question_answers {
+  id String [pk]
+  answer Json [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  questions questions [not null]
+}
+
+Table agency_candidates {
+  id String [pk]
+  agencyCandidateId String [not null]
+  agencyId String [not null]
+  agencyCandidate users [not null]
+  agency users [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table assessment_requests {
+  id String [pk]
+  subject String [not null]
+  description String [not null]
+  userId String [not null]
+  currentStepId String [unique, not null]
+  user users [not null]
+  currentStep request_steps [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  requests requests [not null]
+}
+
+Table requests {
+  id String [pk]
+  numberOfCompetitors Int [not null]
+  paymentReceipt String [not null]
+  majorCareerFamilyId String [not null]
+  subMajorCareerFamilyId String [not null]
+  professionId String [not null]
+  fromCompetencyLevelId String [not null]
+  toCompetencyLevelId String [not null]
+  fromCompetencyLevelJobGradeId String [not null]
+  toCompetencyLevelJobGradeId String [not null]
+  assessmentServiceRequestOptionId String [not null]
+  assessmentRequestId String [not null]
+  assessmentRequest assessment_requests [not null]
+  majorCareerFamily major_career_families [not null]
+  subMajorCareerFamily sub_major_career_families [not null]
+  profession professions [not null]
+  fromCompetencyLevel competency_levels [not null]
+  toCompetencyLevel competency_levels [not null]
+  fromCompetencyLevelJobGrade competency_level_job_grades [not null]
+  toCompetencyLevelJobGrade competency_level_job_grades [not null]
+  assessmentServiceRequestOption assessment_service_request_options [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  candidates request_candidates [not null]
+  steps request_steps [not null]
+  competencyAssessments competency_assessments [not null]
+}
+
+Table request_candidates {
+  id String [pk]
+  requestId String [not null]
+  candidateId String [not null]
+  request requests [not null]
+  candidate users [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  resultThirdParties competency_assessment_result_third_parties [not null]
+  assessmentResults competency_assessment_results [not null]
+  assessmentTrackers candidate_assessment_trackers [not null]
+}
+
+Table request_steps {
+  id String [pk]
+  status RequestStepStatus [not null]
+  remark String [not null]
+  type RequestStepType [not null]
+  weight Float [not null]
+  step Int [not null]
+  requestId String [not null]
+  userId String [not null]
+  request requests [not null]
+  user users [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  assessmentRequests assessment_requests
+}
+
+Table central_recruit_assessment_requests {
+  id String [pk]
+  subject String [not null]
+  description String [not null]
+  userId String [not null]
+  currentStepId String [unique, not null]
+  user users [not null]
+  currentStep central_recruit_request_steps [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  centralRecruitRequests central_recruit_requests [not null]
+}
+
+Table refresh_tokens {
+  id String [pk]
+  userId String [not null]
+  agent String [not null]
+  browser String [not null]
+  os String [not null]
+  device String [not null]
+  ipAddress String [not null]
+  isRevoked Boolean [not null, default: false]
+  expiresAt DateTime [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user users [not null]
+}
+
+Table central_recruit_requests {
+  id String [pk]
+  minimumCgpa Float [not null]
+  numberOfCompetitors Int [not null]
+  workExperience Int [not null]
+  address String [not null]
+  competencyLevelId String [not null]
+  competencyLevelJobGradeId String [not null]
+  professionId String [not null]
+  centralRecruitAssessmentRequestId String [not null]
+  competencyLevel competency_levels [not null]
+  competencyLevelJobGrade competency_level_job_grades [not null]
+  profession professions [not null]
+  centralRecruitAssessmentRequest central_recruit_assessment_requests [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  steps central_recruit_request_steps [not null]
+  vacancies vacancies [not null]
+  competencyAssessments competency_assessments [not null]
+  applicants vacancy_applicants [not null]
+}
+
+Table central_recruit_request_steps {
+  id String [pk]
+  status CentralRecruitRequestStepStatus [not null]
+  remark String [not null]
+  type RequestStepType [not null]
+  weight Float [not null]
+  step Int [not null]
+  centralRecruitRequestId String [not null]
+  userId String [not null]
+  centralRecruitRequest central_recruit_requests [not null]
+  user users [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  centralRecruitAssessmentRequests central_recruit_assessment_requests
+}
+
+Table vacancy_candidate_profiles {
+  id String [pk]
+  cvDocumentPath String [not null]
+  currentCompetencyLevelId String [not null]
+  currentCompetencyLevelJobGradeId String [not null]
+  userId String [not null]
+  currentCompetencyLevel competency_levels [not null]
+  currentCompetencyLevelJobGrade competency_level_job_grades [not null]
+  user users [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  candidateWorkExperiences candidate_work_experiences [not null]
+  candidateEducationalBackgrounds candidate_educational_backgrounds [not null]
+  vacancyApplicants vacancy_applicants [not null]
+}
+
+Table candidate_educational_backgrounds {
+  id String [pk]
+  instituteName String [not null]
+  startDate DateTime [not null]
+  endDate DateTime [not null]
+  certificateDocumentPath String
+  educationalQualificationId String [not null]
+  vacancyCandidateProfileId String [not null]
+  vacancyCandidateProfile vacancy_candidate_profiles [not null]
+  educationalQualification educational_qualifications [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table candidate_work_experiences {
+  id String [pk]
+  organizationName String [not null]
+  position String [not null]
+  employmentType EmploymentType [not null]
+  startDate DateTime [not null]
+  endDate DateTime
+  isCurrent Boolean [not null, default: false]
+  vacancyCandidateProfileId String [not null]
+  vacancyCandidateProfile vacancy_candidate_profiles [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table vacancies {
+  id String [pk]
+  title String [not null]
+  content Json [not null]
+  startDate DateTime [not null]
+  endDate DateTime [not null]
+  centralRecruitRequestId String [not null]
+  centralRecruitRequest central_recruit_requests [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  applicants vacancy_applicants [not null]
+}
+
+Table vacancy_applicants {
+  id String [pk]
+  isSelected Boolean
+  vacancyId String [not null]
+  centralRecruitRequestId String [not null]
+  vacancyCandidateProfileId String [not null]
+  vacancy vacancies [not null]
+  request central_recruit_requests [not null]
+  profile vacancy_candidate_profiles [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table competency_assessments {
+  id String [pk]
+  title String [not null]
+  description String [not null]
+  numberOfQuestions Int [not null]
+  passPointTechnical Int [not null]
+  passPointBehavioral Int [not null]
+  passPointThirdParty Int [not null]
+  price Float [not null]
+  assessmentInstructions Json [not null]
+  scheduledAt DateTime [not null]
+  haveThirdParty Boolean [not null]
+  agreementTemplateId String [not null]
+  requestId String [not null]
+  centralRecruitRequestId String [not null]
+  agreementTemplate agreement_templates [not null]
+  request requests [not null]
+  centralRecruitRequest central_recruit_requests [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  competencyAssessmentThirdParty competency_assessment_third_parties
+  questions competency_assessment_questions [not null]
+  thirdPartyAssessmentSchedules third_party_assessment_schedules
+  competencyAssessmentResults competency_assessment_results [not null]
+  candidateAssessmentTrackers candidate_assessment_trackers [not null]
+}
+
+Table competency_assessment_third_parties {
+  id String [pk]
+  title String [not null]
+  description String [not null]
+  score Float
+  thirdPartyId String [not null]
+  competencyAssessmentId String [unique, not null]
+  thirdParty users [not null]
+  competencyAssessment competency_assessments [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  result competency_assessment_result_third_parties
+}
+
+Table competency_assessment_questions {
+  id String [pk]
+  competencyAssessmentId String [not null]
+  questionId String [not null]
+  competencyAssessment competency_assessments [not null]
+  question questions [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  results competency_assessment_results [not null]
+}
+
+Table job_grades {
+  id String [pk]
+  grade Int [unique, not null]
+  name String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  competencyLevelJobGrades competency_level_job_grades [not null]
+}
+
+Table third_party_assessment_schedules {
+  id String [pk]
+  address String [not null]
+  instructions Json [not null]
+  scheduledAt DateTime [not null]
+  competencyAssessmentId String [unique, not null]
+  thirdPartyId String [not null]
+  thirdParty users [not null]
+  competencyAssessment competency_assessments [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table competency_assessment_result_third_parties {
+  id String [pk]
+  score Float [not null]
+  description String [not null]
+  competencyAssessmentThirdPartyId String [unique, not null]
+  requestCandidateId String [not null]
+  competencyAssessmentThirdParty competency_assessment_third_parties [not null]
+  candidate request_candidates [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table competency_assessment_results {
+  id String [pk]
+  answer Json [not null]
+  hasGivenAnswer Boolean [not null, default: false]
+  isCorrect Boolean [not null]
+  answeredAt DateTime [not null]
+  questionId String [not null]
+  questionCompetencyAssessmentId String [not null]
+  competencyAssessmentId String [not null]
+  requestCandidateId String [not null]
+  competencyAssessment competency_assessments [not null]
+  candidate request_candidates [not null]
+  questionCompetencyAssessment competency_assessment_questions [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table candidate_assessment_trackers {
+  id String [pk]
+  startedAt DateTime [not null]
+  currentTime DateTime [not null]
+  endedAt DateTime
+  hasGivenAnswer Boolean [not null, default: false]
+  hasCompletedAssessment Boolean [not null, default: false]
+  competencyAssessmentId String [not null]
+  requestCandidateId String [not null]
+  competencyAssessment competency_assessments [not null]
+  candidate request_candidates [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table reservations {
+  id String [pk]
+  startDate DateTime [not null]
+  endDate DateTime [not null]
+  placeId String [not null]
+  invoiceId String [not null]
+  userId String [not null]
+  user users [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+}
+
+Table job_categories {
+  id String [pk]
+  name String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  competencyLevels competency_levels [not null]
+}
+
+Table competency_levels {
+  id String [pk]
+  competencyLevel String [unique, not null]
+  description String
+  jobCategoryId String [not null]
+  jobCategory job_categories [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  jobGrades competency_level_job_grades [not null]
+  fromRequests requests [not null]
+  toRequests requests [not null]
+  centralRecruitRequests central_recruit_requests [not null]
+  vacancyProfiles vacancy_candidate_profiles [not null]
+}
+
+Table competency_level_job_grades {
+  id String [pk]
+  competencyLevelId String [not null]
+  jobGradeId String [not null]
+  competencyLevel competency_levels [not null]
+  jobGrade job_grades [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  questions questions [not null]
+  fromRequests requests [not null]
+  toRequests requests [not null]
+  centralRecruitRequests central_recruit_requests [not null]
+  vacancyProfiles vacancy_candidate_profiles [not null]
+  questionEntrySchedules question_entry_schedules [not null]
+}
+
+Table price_types {
+  id String [pk]
+  name String [unique, not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table assessment_service_request_options {
+  id String [pk]
+  name String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  requests requests [not null]
+}
+
+Table educational_qualifications {
+  id String [pk]
+  name String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  deletedAt DateTime
+  candidateEducationalBackgrounds candidate_educational_backgrounds [not null]
+}
+
+Table from {
+  fromrequestsId String [ref: > requests.id]
+  fromrequestsId String [ref: > requests.id]
+}
+
+Table to {
+  torequestsId String [ref: > requests.id]
+  torequestsId String [ref: > requests.id]
+}
+
+Enum QuestionEntryScheduleStatus {
+  OPEN
+  CLOSED
+}
+
+Enum Gender {
+  male
+  female
+}
+
+Enum QuestionSubmitterStatus {
+  OPEN
+  CLOSED
+  REOPEN_FAILED_REVIEW
+}
+
+Enum QuestionReviewerStatus {
+  OPEN
+  CLOSED
+  REOPENED_FOR_REVIEW
+}
+
+Enum QuestionStatus {
+  PENDING_REVIEW
+  DUPLICATED_QUESTION
+  FAILED_REVIEW
+  ACTIVE
+  PARKED
+  REOPENED_FOR_REVIEW
+}
+
+Enum ReviewerType {
+  AI
+  HUMAN
+}
+
+Enum ReviewResult {
+  PASS
+  FAIL
+  REOPENED_FOR_REVIEW
+}
+
+Enum RequestStepStatus {
+  REQUESTED
+  REQUEST_UPDATED
+  APPROVED
+  DECLINED
+  CANDIDATE_ADDED
+  CANDIDATE_UPDATED
+  AGREEMENT_CREATED
+  AGREEMENT_SENT
+  PAYMENT_RECEPT_RECEIVED
+  ASSESSMENT_CREATED
+  ASSESSMENT_UPDATED
+}
+
+Enum RequestStepType {
+  GOOD
+  NORMAL
+  BAD
+}
+
+Enum CentralRecruitRequestStepStatus {
+  REQUESTED
+  REQUEST_UPDATED
+  APPROVED
+  DECLINED
+  AGREEMENT_CREATED
+  AGREEMENT_SENT
+  APPLICANT_FILLED_OUT
+  VACANCY_CREATED
+  VACANCY_UPDATED
+  PAYMENT_RECEPT_RECEIVED
+  ASSESSMENT_CREATED
+  ASSESSMENT_UPDATED
+}
+
+Enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  TEMPORARY
+  INTERNSHIP
+}
+
+Ref: permissions.resourceId > resources.id
+
+Ref: permissions.actionId > actions.id
+
+Ref: role_permissions.roleId > roles.id
+
+Ref: role_permissions.permissionId > permissions.id
+
+Ref: user_roles.userId > users.id [delete: Cascade]
+
+Ref: user_roles.roleId > roles.id [delete: Cascade]
+
+Ref: sub_major_career_families.majorCareerFamilyId > major_career_families.id
+
+Ref: professions.subMajorCareerFamilyId > sub_major_career_families.id
+
+Ref: question_entry_schedules.competencyLevelJobGradeId > competency_level_job_grades.id
+
+Ref: question_entry_schedules.professionId > professions.id
+
+Ref: question_entry_schedule_type_of_competencies.typeOfCompetencyId > type_of_competencies.id
+
+Ref: question_entry_schedule_type_of_competencies.questionEntryScheduleId > question_entry_schedules.id
+
+Ref: question_entry_schedule_type_of_competencies_level_of_difficulties.levelOfDifficultyId > level_of_difficulties.id
+
+Ref: question_entry_schedule_type_of_competencies_level_of_difficulties.questionEntryScheduleTypeOfCompetencyId > question_entry_schedule_type_of_competencies.id
+
+Ref: question_submitters.userId > users.id
+
+Ref: question_submitters.questionEntryScheduleId > question_entry_schedules.id
+
+Ref: question_submitters.questionEntryScheduleTypeOfCompetencyLevelOfDifficultyId > question_entry_schedule_type_of_competencies_level_of_difficulties.id
+
+Ref: question_reviewers.userId > users.id
+
+Ref: question_reviewers.questionEntryScheduleId > question_entry_schedules.id
+
+Ref: question_reviewers.questionSubmitterId > question_submitters.id
+
+Ref: questions.competencyLevelJobGradeId > competency_level_job_grades.id
+
+Ref: questions.professionId > professions.id
+
+Ref: questions.typeOfCompetencyId > type_of_competencies.id
+
+Ref: questions.levelOfDifficultyId > level_of_difficulties.id
+
+Ref: questions.answerId > question_answers.id
+
+Ref: questions.questionSubmitterId > question_submitters.id
+
+Ref: questions.questionReviewerId > question_reviewers.id
+
+Ref: questions.questionEntryScheduleId > question_entry_schedules.id
+
+Ref: question_reviews.questionId > questions.id
+
+Ref: question_options.questionId > questions.id
+
+Ref: agency_candidates.agencyCandidateId > users.id
+
+Ref: agency_candidates.agencyId > users.id
+
+Ref: assessment_requests.userId > users.id
+
+Ref: assessment_requests.currentStepId - request_steps.id
+
+Ref: requests.assessmentRequestId > assessment_requests.id
+
+Ref: requests.majorCareerFamilyId > major_career_families.id
+
+Ref: requests.subMajorCareerFamilyId > sub_major_career_families.id
+
+Ref: requests.professionId > professions.id
+
+Ref: requests.fromCompetencyLevelId > competency_levels.id
+
+Ref: requests.toCompetencyLevelId > competency_levels.id
+
+Ref: requests.fromCompetencyLevelJobGradeId > competency_level_job_grades.id
+
+Ref: requests.toCompetencyLevelJobGradeId > competency_level_job_grades.id
+
+Ref: requests.assessmentServiceRequestOptionId > assessment_service_request_options.id
+
+Ref: request_candidates.requestId > requests.id
+
+Ref: request_candidates.candidateId > users.id
+
+Ref: request_steps.requestId > requests.id
+
+Ref: request_steps.userId > users.id
+
+Ref: central_recruit_assessment_requests.userId > users.id
+
+Ref: central_recruit_assessment_requests.currentStepId - central_recruit_request_steps.id
+
+Ref: refresh_tokens.userId > users.id
+
+Ref: central_recruit_requests.competencyLevelId > competency_levels.id
+
+Ref: central_recruit_requests.competencyLevelJobGradeId > competency_level_job_grades.id
+
+Ref: central_recruit_requests.professionId > professions.id
+
+Ref: central_recruit_requests.centralRecruitAssessmentRequestId > central_recruit_assessment_requests.id
+
+Ref: central_recruit_request_steps.centralRecruitRequestId > central_recruit_requests.id
+
+Ref: central_recruit_request_steps.userId > users.id
+
+Ref: vacancy_candidate_profiles.currentCompetencyLevelId > competency_levels.id
+
+Ref: vacancy_candidate_profiles.currentCompetencyLevelJobGradeId > competency_level_job_grades.id
+
+Ref: vacancy_candidate_profiles.userId > users.id
+
+Ref: candidate_educational_backgrounds.vacancyCandidateProfileId > vacancy_candidate_profiles.id
+
+Ref: candidate_educational_backgrounds.educationalQualificationId > educational_qualifications.id
+
+Ref: candidate_work_experiences.vacancyCandidateProfileId > vacancy_candidate_profiles.id
+
+Ref: vacancies.centralRecruitRequestId > central_recruit_requests.id
+
+Ref: vacancy_applicants.vacancyId > vacancies.id
+
+Ref: vacancy_applicants.centralRecruitRequestId > central_recruit_requests.id
+
+Ref: vacancy_applicants.vacancyCandidateProfileId > vacancy_candidate_profiles.id
+
+Ref: competency_assessments.agreementTemplateId > agreement_templates.id
+
+Ref: competency_assessments.requestId > requests.id
+
+Ref: competency_assessments.centralRecruitRequestId > central_recruit_requests.id
+
+Ref: competency_assessment_third_parties.thirdPartyId > users.id
+
+Ref: competency_assessment_third_parties.competencyAssessmentId - competency_assessments.id
+
+Ref: competency_assessment_questions.competencyAssessmentId > competency_assessments.id
+
+Ref: competency_assessment_questions.questionId > questions.id
+
+Ref: third_party_assessment_schedules.thirdPartyId > users.id
+
+Ref: third_party_assessment_schedules.competencyAssessmentId - competency_assessments.id
+
+Ref: competency_assessment_result_third_parties.competencyAssessmentThirdPartyId - competency_assessment_third_parties.id
+
+Ref: competency_assessment_result_third_parties.requestCandidateId > request_candidates.id
+
+Ref: competency_assessment_results.competencyAssessmentId > competency_assessments.id
+
+Ref: competency_assessment_results.requestCandidateId > request_candidates.id
+
+Ref: competency_assessment_results.questionCompetencyAssessmentId > competency_assessment_questions.id
+
+Ref: candidate_assessment_trackers.competencyAssessmentId > competency_assessments.id
+
+Ref: candidate_assessment_trackers.requestCandidateId > request_candidates.id
+
+Ref: reservations.userId > users.id
+
+Ref: competency_levels.jobCategoryId > job_categories.id
+
+Ref: competency_level_job_grades.competencyLevelId > competency_levels.id
+
+Ref: competency_level_job_grades.jobGradeId > job_grades.id

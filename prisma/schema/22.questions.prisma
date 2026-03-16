@@ -1,0 +1,70 @@
+model Question {
+  id                        String         @id @default(ulid())
+  question                  Json
+  questionHash              String         @unique
+  timeLimit                 Int
+  status                    QuestionStatus @default(PENDING_REVIEW)
+  competencyLevelJobGradeId String
+  professionId              String
+  typeOfCompetencyId        String
+  levelOfDifficultyId       String
+  answerId                  String
+  questionSubmitterId       String
+  questionReviewerId        String
+  questionEntryScheduleId   String
+
+  competencyLevelJobGrade CompetencyLevelJobGrade @relation(fields: [competencyLevelJobGradeId], references: [id])
+  profession              Profession              @relation(fields: [professionId], references: [id])
+  typeOfCompetency        TypeOfCompetency        @relation(fields: [typeOfCompetencyId], references: [id])
+  levelOfDifficulty       LevelOfDifficulty       @relation(fields: [levelOfDifficultyId], references: [id])
+  answer                  QuestionAnswer          @relation(fields: [answerId], references: [id])
+  questionSubmitter       QuestionSubmitter       @relation(fields: [questionSubmitterId], references: [id])
+  questionReviewer        QuestionReviewer        @relation(fields: [questionReviewerId], references: [id])
+  questionEntrySchedule   QuestionEntrySchedule   @relation(fields: [questionEntryScheduleId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  options                       QuestionOption[]
+  competencyAssessmentQuestions CompetencyAssessmentQuestion[]
+  reviews                       QuestionReview[]
+
+  @@map("questions")
+}
+
+enum QuestionStatus {
+  PENDING_REVIEW
+  DUPLICATED_QUESTION
+  FAILED_REVIEW
+  ACTIVE
+  PARKED
+  REOPENED_FOR_REVIEW
+}
+
+model QuestionReview {
+  id               String       @id @default(ulid())
+  questionId       String
+  reviewerType     ReviewerType @default(AI)
+  reviewResult     ReviewResult
+  reviewResultNote String       @db.Text
+
+  question Question @relation(fields: [questionId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("question_reviews")
+}
+
+enum ReviewerType {
+  AI
+  HUMAN
+}
+
+enum ReviewResult {
+  PASS
+  FAIL
+  REOPENED_FOR_REVIEW
+}

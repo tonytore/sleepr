@@ -1,0 +1,30 @@
+/**
+ * Resource enum for access control
+ */
+export enum Resource {
+  Dashboard = 'dashboard',
+  JobGrade = 'job-grade',
+  JobCategory = 'job-category',
+  CompetencyLevel = 'competency-level',
+  RequestOptions = 'request-options',
+  EducationalQualification = 'educational-qualification',
+  MajorCareerFamily = 'major-career-family',
+  SubMajorCareerFamily = 'sub-major-career-family',
+  Professions = 'professions',
+  TypesOfCompetency = 'types-of-competency',
+  LevelOfDifficulty = 'level-of-difficulty',
+  User = 'user',
+  Role = 'role',
+  Resource = 'resource',
+  Action = 'action',
+  Permission = 'permission',
+  AgreementTemplate = 'agreement-template',
+  QuestionBankManagement = 'question-bank-management',
+  Question = 'question',
+  Vacancy = 'vacancy',
+  AiAssistant = 'ai-assistant',
+  AssessmentRequest = 'assessment-request',
+  CompetencyAssessment = 'competency-assessment',
+  CentralRecruitRequest = 'central-recruit-request',
+  Location = 'location',
+}

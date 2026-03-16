@@ -1,0 +1,21 @@
+model VacancyCandidateProfile {
+  id                               String @id @default(ulid())
+  cvDocumentPath                   String
+  currentCompetencyLevelId         String
+  currentCompetencyLevelJobGradeId String
+  userId                           String
+
+  currentCompetencyLevel         CompetencyLevel         @relation(fields: [currentCompetencyLevelId], references: [id])
+  currentCompetencyLevelJobGrade CompetencyLevelJobGrade @relation(fields: [currentCompetencyLevelJobGradeId], references: [id])
+  user                           User                    @relation(fields: [userId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  candidateWorkExperiences        CandidateWorkExperience[]
+  candidateEducationalBackgrounds CandidateEducationalBackground[]
+  vacancyApplicants               VacancyApplicant[]
+
+  @@map("vacancy_candidate_profiles")
+}

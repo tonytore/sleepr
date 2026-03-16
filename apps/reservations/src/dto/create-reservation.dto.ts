@@ -1,25 +1,39 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsISO8601, IsNotEmpty, IsString } from 'class-validator';
+import { IsISO8601, IsString } from 'class-validator';
 
 export class CreateReservationDto {
   @ApiProperty({
-    description: 'The StartDate the reservation is happen',
-    example: '2026-03-13T00:00:00.000Z',
+    example: '2026-03-20T10:00:00Z',
+    description: 'Reservation start date in ISO 8601 format',
   })
   @IsISO8601()
-  startDate: Date;
-  @IsISO8601()
-  endDAte: Date;
+  startDate: string;
 
+  @ApiProperty({
+    example: '2026-03-22T10:00:00Z',
+    description: 'Reservation end date in ISO 8601 format',
+  })
+  @IsISO8601()
+  endDate: string;
+
+  @ApiProperty({
+    example: '01J6R3V2A1H8C3J7Z3Y4R2T1WQ',
+    description: 'User ID',
+  })
   @IsString()
-  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty({
+    example: 'place_123',
+    description: 'Place ID',
+  })
+  @IsString()
   placeId: string;
 
+  @ApiProperty({
+    example: 'invoice_123',
+    description: 'Invoice ID',
+  })
   @IsString()
-  @IsNotEmpty()
   invoiceId: string;
-
-  @IsString()
-  @IsNotEmpty()
-  userId: string;
 }

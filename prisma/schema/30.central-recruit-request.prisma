@@ -1,0 +1,27 @@
+model CentralRecruitRequest {
+  id                                String @id @default(ulid())
+  minimumCgpa                       Float
+  numberOfCompetitors               Int
+  workExperience                    Int
+  address                           String @db.Text
+  competencyLevelId                 String
+  competencyLevelJobGradeId         String
+  professionId                      String
+  centralRecruitAssessmentRequestId String
+
+  competencyLevel                 CompetencyLevel                 @relation(fields: [competencyLevelId], references: [id])
+  competencyLevelJobGrade         CompetencyLevelJobGrade         @relation(fields: [competencyLevelJobGradeId], references: [id])
+  profession                      Profession                      @relation(fields: [professionId], references: [id])
+  centralRecruitAssessmentRequest CentralRecruitAssessmentRequest @relation(fields: [centralRecruitAssessmentRequestId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  steps                 CentralRecruitRequestStep[]
+  vacancies             Vacancy[]
+  competencyAssessments CompetencyAssessment[]
+  applicants            VacancyApplicant[]
+
+  @@map("central_recruit_requests")
+}

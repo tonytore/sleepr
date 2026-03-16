@@ -1,0 +1,21 @@
+model CompetencyAssessmentResult {
+  id                             String   @id @default(ulid())
+  answer                         Json
+  hasGivenAnswer                 Boolean  @default(false)
+  isCorrect                      Boolean
+  answeredAt                     DateTime
+  questionId                     String
+  questionCompetencyAssessmentId String
+  competencyAssessmentId         String
+  requestCandidateId             String
+
+  competencyAssessment         CompetencyAssessment         @relation(fields: [competencyAssessmentId], references: [id])
+  candidate                    RequestCandidate             @relation(fields: [requestCandidateId], references: [id])
+  questionCompetencyAssessment CompetencyAssessmentQuestion @relation(fields: [questionCompetencyAssessmentId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("competency_assessment_results")
+}

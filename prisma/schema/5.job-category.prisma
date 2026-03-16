@@ -1,0 +1,13 @@
+model JobCategory {
+  id          String  @id @default(ulid())
+  name        String  @unique @db.VarChar(128)
+  description String? @db.Text
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  competencyLevels CompetencyLevel[]
+
+  @@map("job_categories")
+}

@@ -1,0 +1,9 @@
+model PriceType {
+  id   String @id @default(ulid())
+  name String @unique @db.VarChar(255)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("price_types")
+}

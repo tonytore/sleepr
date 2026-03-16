@@ -1,0 +1,26 @@
+model QuestionReviewer {
+  id                      String                 @id @default(ulid())
+  userId                  String
+  questionSubmitterId     String
+  questionEntryScheduleId String
+  numberOfQuestions       Int
+  status                  QuestionReviewerStatus @default(CLOSED)
+
+  user                  User                  @relation(fields: [userId], references: [id])
+  questionEntrySchedule QuestionEntrySchedule @relation(fields: [questionEntryScheduleId], references: [id])
+  questionSubmitter     QuestionSubmitter     @relation(fields: [questionSubmitterId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  questions Question[]
+
+  @@map("question_reviewers")
+}
+
+enum QuestionReviewerStatus {
+  OPEN
+  CLOSED
+  REOPENED_FOR_REVIEW
+}

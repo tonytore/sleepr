@@ -1,50 +1,64 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { ReservationRepository } from './repository/reservation.repository';
-import { GetReservationDto } from './dto/get-reservation.dto';
 
 @Injectable()
 export class ReservationsService {
-  constructor(private readonly reservationRepository: ReservationRepository) {}
+  constructor(private readonly reservationRepo: ReservationRepository) {}
+
   async create(createReservationDto: CreateReservationDto) {
-    return await this.reservationRepository.create({
+    return this.reservationRepo.create({
       data: {
         ...createReservationDto,
+        startDate: new Date(createReservationDto.startDate),
+        endDate: new Date(createReservationDto.endDate),
       },
     });
   }
 
   async findAll() {
-    return await this.reservationRepository.findMany({
+    return this.reservationRepo.findMany({
       orderBy: {
         createdAt: 'desc',
       },
     });
   }
-  async findOne(getReservationDto: GetReservationDto) {
-    return await this.reservationRepository.findUnique({
-      where: {
-        id: getReservationDto.id,
-      },
+
+  async findOne(id: string) {
+    const reservation = await this.reservationRepo.findUnique({
+      where: { id },
     });
+
+    if (!reservation) {
+      throw new NotFoundException('Reservation not found');
+    }
+
+    return reservation;
   }
 
-  async update(
-    getReservationDto: GetReservationDto,
-    updateReservationDto: UpdateReservationDto,
-  ) {
-    return await this.reservationRepository.update({
-      where: {
-        id: getReservationDto.id,
-      },
+  async update(id: string, updateReservationDto: UpdateReservationDto) {
+    await this.findOne(id);
+
+    return this.reservationRepo.update({
+      where: { id },
       data: {
         ...updateReservationDto,
+        startDate: updateReservationDto.startDate
+          ? new Date(updateReservationDto.startDate)
+          : undefined,
+        endDate: updateReservationDto.endDate
+          ? new Date(updateReservationDto.endDate)
+          : undefined,
       },
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} reservation`;
+  async remove(id: string) {
+    await this.findOne(id);
+
+    return this.reservationRepo.delete({
+      where: { id },
+    });
   }
 }
