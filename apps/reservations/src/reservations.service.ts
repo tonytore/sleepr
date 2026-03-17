@@ -2,17 +2,19 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { ReservationRepository } from './repository/reservation.repository';
+import { JwtPayload } from '@app/common/auth/interfaces/jwt-payload.interface';
 
 @Injectable()
 export class ReservationsService {
   constructor(private readonly reservationRepo: ReservationRepository) {}
 
-  async create(createReservationDto: CreateReservationDto) {
+  async create(dto: CreateReservationDto, user: JwtPayload) {
     return this.reservationRepo.create({
       data: {
-        ...createReservationDto,
-        startDate: new Date(createReservationDto.startDate),
-        endDate: new Date(createReservationDto.endDate),
+        ...dto,
+        userId: user.sub, // 🔥 IMPORTANT
+        startDate: new Date(dto.startDate),
+        endDate: new Date(dto.endDate),
       },
     });
   }

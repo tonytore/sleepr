@@ -32,6 +32,7 @@ import { AuthType } from '@app/common/auth/enums/auth-type.enum';
 import { CurrentUser } from '@app/common/auth/decorators/current-user.decorator';
 import { type JwtPayload } from '@app/common/auth/interfaces/jwt-payload.interface';
 import { RootConfig } from '../config/config.type';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 /**
  * Auth controller - sign-in, sign-up, sign-out, token refresh, and password reset.
@@ -160,5 +161,18 @@ export class AuthController {
   @ApiResetPassword()
   resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     return this.verificationService.resetPassword(resetPasswordDto);
+  }
+
+  @MessagePattern('authenticate')
+  async authenticate(@Payload() payload: SignInDto) {
+    const result = await this.authService.signIn(payload, {
+      ip: 'microservice',
+      userAgent: 'microservice',
+      browser: 'microservice',
+      os: 'microservice',
+      device: 'microservice',
+      clientType: 'microservice',
+    });
+    return result;
   }
 }

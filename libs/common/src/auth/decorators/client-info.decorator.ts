@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { createParamDecorator, type ExecutionContext } from '@nestjs/common';
 import { type Request } from 'express';
 import * as UAParser from 'ua-parser-js';
@@ -10,6 +8,7 @@ export interface ClientInfo {
   browser: string;
   os: string;
   device: string;
+  clientType?: 'web' | 'mobile' | 'microservice';
 }
 
 /**
@@ -32,10 +31,16 @@ function extractClientInfo(request: Request): ClientInfo {
 
   const userAgent = request.headers['user-agent'] || 'unknown';
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
   const parser = new UAParser.UAParser(userAgent);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
   const result = parser.getResult();
+
+  // Determine client type
+  let clientType: 'web' | 'mobile' | 'microservice' = 'web'; // default
+  if (result.device.type === 'mobile') {
+    clientType = 'mobile';
+  } else if (result.device.type === 'console') {
+    clientType = 'microservice';
+  }
 
   return {
     ip,
@@ -43,6 +48,7 @@ function extractClientInfo(request: Request): ClientInfo {
     browser: result.browser.name || 'unknown',
     os: result.os.name || 'unknown',
     device: result.device.type || 'desktop',
+    clientType,
   };
 }
 

@@ -6,13 +6,15 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
 } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
-import { ReservationAuthGuard } from './guards/reservations.guards';
+import { AuthType } from '@app/common/auth/enums/auth-type.enum';
+import { Auth } from '@app/common/auth/decorators/auth.decorator';
+import { CurrentUser } from '@app/common/auth/decorators/current-user.decorator';
+import { type JwtPayload } from '@app/common/auth/interfaces/jwt-payload.interface';
 
 @ApiTags('Reservations')
 @Controller('reservations')
@@ -20,12 +22,11 @@ export class ReservationsController {
   constructor(private readonly reservationsService: ReservationsService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a new reservation' })
-  create(@Body() createReservationDto: CreateReservationDto) {
-    return this.reservationsService.create(createReservationDto);
+  @Auth(AuthType.Bearer)
+  create(@Body() dto: CreateReservationDto, @CurrentUser() user: JwtPayload) {
+    return this.reservationsService.create(dto, user);
   }
 
-  @UseGuards(ReservationAuthGuard)
   @Get()
   @ApiOperation({ summary: 'Get all reservations' })
   findAll() {

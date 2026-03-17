@@ -20,10 +20,13 @@ import { UsersModule } from './users/users.module';
 import { MailModule } from '@app/common/mail/mail.module';
 import { DatabaseModule } from '@app/common/database/database.module';
 import { ConfigModule } from '@nestjs/config';
-import databaseConfig from 'apps/reservations/src/config/database.config';
-import appConfig from 'apps/reservations/src/config/app.config';
-import { AuthDatabaseValidation } from './schema/database.validation';
-import { AuthMicroserviceController } from './core/auth.microservice.controller';
+// import { AuthDatabaseValidation } from './schema/database.validation';
+import appConfig from './config/app.config';
+import databaseConfig from './config/database.config';
+import jwtConfig from './config/jwt.config';
+import mailConfig from './config/mail.config';
+import storageConfig from './config/storage.config';
+// import { AuthMicroserviceController } from './core/auth.microservice.controller';
 
 /**
  * Auth module - Authentication, session management, email verification, and MFA.
@@ -33,8 +36,8 @@ import { AuthMicroserviceController } from './core/auth.microservice.controller'
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: 'apps/auth/.env',
-      load: [databaseConfig, appConfig],
-      validationSchema: AuthDatabaseValidation,
+      load: [databaseConfig, appConfig, jwtConfig, mailConfig, storageConfig],
+      // validationSchema: AuthDatabaseValidation,
     }),
     forwardRef(() => UsersModule),
     SharedAuthModule,
@@ -60,7 +63,7 @@ import { AuthMicroserviceController } from './core/auth.microservice.controller'
     AuthController,
     VerificationController,
     SessionsController,
-    AuthMicroserviceController,
+    // AuthMicroserviceController,
   ],
   exports: [
     AuthService,
