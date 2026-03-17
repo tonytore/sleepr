@@ -1,5 +1,5 @@
+import { Action } from '@app/common/auth/enums/action.enum';
 import { Logger } from '@nestjs/common';
-import { Action } from 'src/common/auth/enums/action.enum';
 
 import type { PrismaClient } from '@prisma/client';
 

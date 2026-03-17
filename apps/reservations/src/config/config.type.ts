@@ -2,12 +2,12 @@ import { type ConfigType } from '@nestjs/config';
 
 import type appConfig from './app.config';
 import type databaseConfig from './database.config';
-import type jwtConfig from './jwt.config';
 import type mailConfig from './mail.config';
 import type storageConfig from './storage.config';
+import jwtConfig from './jwt.config';
 
 export interface RootConfig {
-  app: ConfigType<typeof appConfig>;
+  reservations_app: ConfigType<typeof appConfig>;
   database: ConfigType<typeof databaseConfig>;
   jwt: ConfigType<typeof jwtConfig>;
   mail: ConfigType<typeof mailConfig>;

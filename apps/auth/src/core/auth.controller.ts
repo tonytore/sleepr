@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Body,
   Controller,
@@ -28,12 +26,12 @@ import { RegisterDto } from './register.dto';
 import { SignInDto } from './signIn.dto';
 
 import type { Response } from 'express';
-import { RootConfig } from 'apps/reservations/src/config/config.type';
 import { Auth, Public } from '@app/common/auth/decorators/auth.decorator';
 import { ClientInfo } from '@app/common/auth/decorators/client-info.decorator';
 import { AuthType } from '@app/common/auth/enums/auth-type.enum';
 import { CurrentUser } from '@app/common/auth/decorators/current-user.decorator';
 import { type JwtPayload } from '@app/common/auth/interfaces/jwt-payload.interface';
+import { RootConfig } from '../config/config.type';
 
 /**
  * Auth controller - sign-in, sign-up, sign-out, token refresh, and password reset.
@@ -99,7 +97,6 @@ export class AuthController {
     );
 
     // Attach accessToken to HttpOnly cookie for web clients
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     res.cookie('accessToken', accessToken, this.getCookieOptions());
 
     return result;

@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
+import { ReservationAuthGuard } from './guards/reservations.guards';
 
 @ApiTags('Reservations')
 @Controller('reservations')
@@ -23,6 +25,7 @@ export class ReservationsController {
     return this.reservationsService.create(createReservationDto);
   }
 
+  @UseGuards(ReservationAuthGuard)
   @Get()
   @ApiOperation({ summary: 'Get all reservations' })
   findAll() {

@@ -23,11 +23,24 @@ import { ConfigModule } from '@nestjs/config';
 import databaseConfig from 'apps/reservations/src/config/database.config';
 import appConfig from 'apps/reservations/src/config/app.config';
 import { AuthDatabaseValidation } from './schema/database.validation';
+import { AuthMicroserviceController } from './core/auth.microservice.controller';
 
 /**
  * Auth module - Authentication, session management, email verification, and MFA.
  */
 @Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: 'apps/auth/.env',
+      load: [databaseConfig, appConfig],
+      validationSchema: AuthDatabaseValidation,
+    }),
+    forwardRef(() => UsersModule),
+    SharedAuthModule,
+    MailModule,
+    DatabaseModule,
+  ],
   providers: [
     { provide: HashProvider, useClass: ArgonProvider },
     AuthService,
@@ -43,6 +56,12 @@ import { AuthDatabaseValidation } from './schema/database.validation';
       useClass: PermissionsGuard,
     },
   ],
+  controllers: [
+    AuthController,
+    VerificationController,
+    SessionsController,
+    AuthMicroserviceController,
+  ],
   exports: [
     AuthService,
     HashProvider,
@@ -52,18 +71,5 @@ import { AuthDatabaseValidation } from './schema/database.validation';
     MfaService,
     SharedAuthModule,
   ],
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: 'apps/auth/.env',
-      load: [databaseConfig, appConfig],
-      validationSchema: AuthDatabaseValidation,
-    }),
-    forwardRef(() => UsersModule),
-    SharedAuthModule,
-    MailModule,
-    DatabaseModule,
-  ],
-  controllers: [AuthController, VerificationController, SessionsController],
 })
 export class AuthModule {}

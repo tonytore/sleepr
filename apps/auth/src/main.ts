@@ -32,7 +32,16 @@ async function bootstrap() {
   });
   const configService: ConfigService<RootConfig> = app.get(ConfigService);
   const appConfig = configService.get<AppConfig>('app');
-  const port = appConfig?.port || 4001;
+  const http_port = appConfig?.http_port || 3008;
+  const tcp_port = appConfig?.tcp_port || 4001;
+  app.connectMicroservice({
+    transport: 'TCP',
+    options: {
+      host: '0.0.0.0',
+      port: tcp_port, // 👈 IMPORTANT
+    },
+  });
+
   app.useLogger(
     new ConsoleLogger({
       prefix: appConfig?.name || 'PSCMS',
@@ -114,21 +123,25 @@ async function bootstrap() {
   app.set('trust proxy', true);
   app.enableShutdownHooks();
 
+  await app.startAllMicroservices();
+
   // Custom listen with retry logic for development reliability
   const startApp = async (retries = 5, delay = 1000) => {
     for (let i = 0; i < retries; i++) {
       try {
-        await app.listen(port, '0.0.0.0');
-        logger.log(`🚀 Application is running on http://localhost:${port}`);
+        await app.listen(http_port, '0.0.0.0');
+        logger.log(
+          `🚀 Application is running on http://localhost:${http_port}`,
+        );
         return;
       } catch (err: any) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (err.code === 'EADDRINUSE' && i < retries - 1) {
           logger.warn(
-            `Port ${port} is in use, retrying in ${delay}ms... (Attempt ${i + 1}/${retries})`,
+            `port ${http_port} is in use, retrying in ${delay}ms... (Attempt ${i + 1}/${retries})`,
           );
           try {
-            execSync(`lsof -t -i:${port} | xargs kill -9 || true`);
+            execSync(`lsof -t -i:${http_port} | xargs kill -9 || true`);
           } catch {
             /* empty */
           }
