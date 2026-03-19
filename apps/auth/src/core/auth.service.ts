@@ -1,6 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   HttpException,
@@ -107,6 +106,22 @@ export class AuthService {
       permissions: Array.from(permissionSet),
       accessToken,
     };
+  }
+
+  async verifyAccessToken(token: string): Promise<JwtPayload> {
+    try {
+      const payload = await this.refreshTokensProvider[
+        'generateTokensProvider'
+      ]['jwtService'].verifyAsync(token, {
+        secret:
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          this.configService.get('jwt', { infer: true })!.accessTokenSecret,
+      });
+
+      return payload;
+    } catch (err) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 
   async refreshToken(user: JwtPayload, client: ClientInfo) {

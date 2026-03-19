@@ -8,4 +8,9 @@ export default registerAs('app', () => ({
   swaggerUser: process.env.SWAGGER_USER || 'admin',
   swaggerPassword: process.env.SWAGGER_PASSWORD || 'admin',
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
+
+  maxFailedLoginAttemptPerMinutes: Number(
+    process.env.MAX_FAILED_LOGIN_ATTEMPT_PER_MINUTES || 5,
+  ),
+  lockOutDurationMinutes: Number(process.env.LOCK_OUT_DURATION_MINUTES || 15),
 }));

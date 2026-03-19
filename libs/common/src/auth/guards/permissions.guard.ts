@@ -6,11 +6,11 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-import { PERMISSION_KEY, REQUEST_USER_KEY } from '../auth.constants';
-import { type JwtPayload } from '../interfaces/jwt-payload.interface';
+import { PERMISSION_KEY } from '../auth.constants';
 import { type RequiredPermission } from '../interfaces/permission.types';
 
 import type { Request } from 'express';
+import { getUserFromContext } from './utils/auth-util';
 
 /**
  * Permissions guard. It checks if the user has the required permissions to access the resource. To use this guard, the user must be authenticated. We can use this guard for routes that require the user to have specific permissions. For example, If we want to restrict a route to only users with the permission "user:create", we can use this guard like this: @UseGuards(PermissionsGuard) @Permissions({ resource: 'user', action: 'create' })
@@ -36,8 +36,9 @@ export class PermissionsGuard implements CanActivate {
       return true;
     }
 
-    const request: Request = context.switchToHttp().getRequest();
-    const user = request[REQUEST_USER_KEY] as JwtPayload | undefined;
+    // const request: Request = context.switchToHttp().getRequest();
+    // const user = request[REQUEST_USER_KEY] as JwtPayload | undefined;
+    const user = getUserFromContext(context);
 
     if (!user?.perms) {
       throw new ForbiddenException('User permissions not found');

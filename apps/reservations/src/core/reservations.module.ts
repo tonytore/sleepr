@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Module } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
-import { ReservationRepository } from './repository/reservation.repository';
+import { ReservationRepository } from '../repository/reservation.repository';
 import { DatabaseModule } from '@app/common/database/database.module';
 import { LoggerModule } from '@app/common/logger/logger.module';
 import { ConfigModule } from '@nestjs/config';
@@ -12,9 +13,10 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthenticationGuard } from '@app/common/auth/guards/authentication.guard';
 import { AccessTokenGuard } from '@app/common/auth/guards/access-token.guard';
 import { SharedAuthModule } from '@app/common/auth/shared-auth.module';
-import jwtConfig from './config/jwt.config';
-import mailConfig from './config/mail.config';
-import storageConfig from './config/storage.config';
+import jwtConfig from '../config/jwt.config';
+import mailConfig from '../config/mail.config';
+import storageConfig from '../config/storage.config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -24,6 +26,13 @@ import storageConfig from './config/storage.config';
       load: [databaseConfig, appConfig, jwtConfig, mailConfig, storageConfig],
       // validationSchema: DatabaseValidation,
     }),
+    ClientsModule.register([
+      {
+        name: 'AUTH_SERVICE',
+        transport: Transport.TCP,
+        options: { host: 'localhost', port: 4001 }, // or config
+      },
+    ]),
 
     DatabaseModule,
     LoggerModule,

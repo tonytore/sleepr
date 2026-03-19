@@ -57,7 +57,18 @@ function extractClientInfo(request: Request): ClientInfo {
  * @returns ClientInfo
  */
 export const ClientInfo = createParamDecorator(
-  (data: unknown, ctx: ExecutionContext): ClientInfo => {
+  (_data: unknown, ctx: ExecutionContext): ClientInfo => {
+    if (ctx.getType() !== 'http') {
+      return {
+        ip: 'unknown',
+        userAgent: 'microservice',
+        browser: 'unknown',
+        os: 'unknown',
+        device: 'unknown',
+        clientType: 'microservice',
+      };
+    }
+
     const request: Request = ctx.switchToHttp().getRequest();
     return extractClientInfo(request);
   },

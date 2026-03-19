@@ -1,9 +1,8 @@
 import { createParamDecorator, type ExecutionContext } from '@nestjs/common';
 
-import { REQUEST_USER_KEY } from '../auth.constants';
-
 import type { JwtPayload } from '../interfaces/jwt-payload.interface';
 import type { Request } from 'express';
+import { getUserFromContext } from '../guards/utils/auth-util';
 
 /**
  * Get the current user from the request. It extracts the user from the request and returns it.
@@ -13,8 +12,10 @@ import type { Request } from 'express';
  */
 export const CurrentUser = createParamDecorator(
   (field: keyof JwtPayload | undefined, ctx: ExecutionContext) => {
-    const request: Request = ctx.switchToHttp().getRequest();
-    const user = request[REQUEST_USER_KEY] as JwtPayload;
+    const user = getUserFromContext(ctx);
+    if (!user) {
+      return undefined;
+    }
 
     return field ? user[field] : user;
   },

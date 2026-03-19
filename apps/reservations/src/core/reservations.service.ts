@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateReservationDto } from './dto/create-reservation.dto';
-import { UpdateReservationDto } from './dto/update-reservation.dto';
-import { ReservationRepository } from './repository/reservation.repository';
+import { CreateReservationDto } from '../dto/create-reservation.dto';
+import { UpdateReservationDto } from '../dto/update-reservation.dto';
+import { ReservationRepository } from '../repository/reservation.repository';
 import { JwtPayload } from '@app/common/auth/interfaces/jwt-payload.interface';
 
 @Injectable()

@@ -95,15 +95,20 @@ export class RefreshTokensProvider {
    * @returns Duration in milliseconds
    */
   private parseDuration(duration: string): number {
-    const match = /^(\d+)(mins|hours|days)$/.exec(duration);
+    const match = /^(\d+)(m|h|d|mins|hours|days)$/.exec(duration);
     if (!match) return 0;
-    const value = Number.parseInt(match[1]);
+
+    const value = Number(match[1]);
     const unit = match[2];
+
     switch (unit) {
+      case 'm':
       case 'mins':
         return value * 60 * 1000;
+      case 'h':
       case 'hours':
         return value * 60 * 60 * 1000;
+      case 'd':
       case 'days':
         return value * 24 * 60 * 60 * 1000;
       default:

@@ -126,6 +126,9 @@ importers:
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
+      '@types/json2csv':
+        specifier: ^5.0.7
+        version: 5.0.7
       '@types/node':
         specifier: ^22.10.7
         version: 22.19.15
@@ -1308,6 +1311,9 @@ packages:
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+
+  '@types/json2csv@5.0.7':
+    resolution: {integrity: sha512-Ma25zw9G9GEBnX8b12R4EYvnFT6dBh8L3jwsN5EUFXa+fl2dqmbLDbNWN0XuQU3rSXdsbBeCYjI9uHU2PUBxhA==}
 
   '@types/jsonwebtoken@9.0.10':
     resolution: {integrity: sha512-asx5hIG9Qmf/1oStypjanR7iKTv0gXQ1Ov/jfrX6kS/EO0OFni8orbmGCn0672NHR3kXHwpAwR+B368ZGN/2rA==}
@@ -6543,6 +6549,10 @@ snapshots:
       pretty-format: 30.3.0
 
   '@types/json-schema@7.0.15': {}
+
+  '@types/json2csv@5.0.7':
+    dependencies:
+      '@types/node': 22.19.15
 
   '@types/jsonwebtoken@9.0.10':
     dependencies:

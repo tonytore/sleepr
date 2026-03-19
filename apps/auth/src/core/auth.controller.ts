@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -5,6 +6,7 @@ import {
   HttpStatus,
   Post,
   Res,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiTags } from '@nestjs/swagger';
@@ -51,18 +53,27 @@ export class AuthController {
    * @param duration - Duration string
    * @returns Duration in milliseconds
    */
+
   private parseDuration(duration: string): number {
-    const match = /^(\d+)(mins|hours|days)$/.exec(duration);
+    const match = /^(\d+)(m|h|d|mins|hours|days)$/.exec(duration);
     if (!match) return 0;
+
     const value = Number.parseInt(match[1]);
     const unit = match[2];
+
     switch (unit) {
+      case 'm':
       case 'mins':
         return value * 60 * 1000;
+
+      case 'h':
       case 'hours':
         return value * 60 * 60 * 1000;
+
+      case 'd':
       case 'days':
         return value * 24 * 60 * 60 * 1000;
+
       default:
         return 0;
     }
@@ -163,16 +174,20 @@ export class AuthController {
     return this.verificationService.resetPassword(resetPasswordDto);
   }
 
-  @MessagePattern('authenticate')
-  async authenticate(@Payload() payload: SignInDto) {
-    const result = await this.authService.signIn(payload, {
-      ip: 'microservice',
-      userAgent: 'microservice',
-      browser: 'microservice',
-      os: 'microservice',
-      device: 'microservice',
-      clientType: 'microservice',
-    });
-    return result;
+  @MessagePattern('validate-token') // better name
+  async validateToken(@Payload() data: { accessToken: string }) {
+    if (!data?.accessToken) {
+      throw new UnauthorizedException('No access token provided');
+    }
+
+    try {
+      // Use your existing verify method
+      const payload = await this.authService.verifyAccessToken(
+        data.accessToken,
+      );
+      return payload; // return JwtPayload or { valid: true, user: payload }
+    } catch (err) {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
   }
 }

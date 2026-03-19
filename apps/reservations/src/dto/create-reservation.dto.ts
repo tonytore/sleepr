@@ -16,12 +16,12 @@ export class CreateReservationDto {
   @IsISO8601()
   endDate: string;
 
-  @ApiProperty({
-    example: '01J6R3V2A1H8C3J7Z3Y4R2T1WQ',
-    description: 'User ID',
-  })
-  @IsString()
-  userId: string;
+  // @ApiProperty({
+  //   example: '01J6R3V2A1H8C3J7Z3Y4R2T1WQ',
+  //   description: 'User ID',
+  // })
+  // @IsString()
+  // userId: string;
 
   @ApiProperty({
     example: 'place_123',

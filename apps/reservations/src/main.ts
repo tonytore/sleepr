@@ -12,7 +12,7 @@ import {
 } from 'apps/reservations/src/config/config.type';
 import { Logger as PinoLogger } from 'nestjs-pino';
 import { execSync } from 'child_process';
-import { ReservationsModule } from './reservations.module';
+import { ReservationsModule } from './core/reservations.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {

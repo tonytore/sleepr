@@ -6,15 +6,18 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
-import { CreateReservationDto } from './dto/create-reservation.dto';
-import { UpdateReservationDto } from './dto/update-reservation.dto';
+import { CreateReservationDto } from '../dto/create-reservation.dto';
+import { UpdateReservationDto } from '../dto/update-reservation.dto';
 import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { AuthType } from '@app/common/auth/enums/auth-type.enum';
 import { Auth } from '@app/common/auth/decorators/auth.decorator';
 import { CurrentUser } from '@app/common/auth/decorators/current-user.decorator';
 import { type JwtPayload } from '@app/common/auth/interfaces/jwt-payload.interface';
+import { ApiReservation } from './auth-swagger.decorator';
 
 @ApiTags('Reservations')
 @Controller('reservations')
@@ -23,17 +26,22 @@ export class ReservationsController {
 
   @Post()
   @Auth(AuthType.Bearer)
+  @HttpCode(HttpStatus.CREATED)
+  @ApiReservation()
+  @ApiReservation()
   create(@Body() dto: CreateReservationDto, @CurrentUser() user: JwtPayload) {
     return this.reservationsService.create(dto, user);
   }
 
   @Get()
+  @Auth(AuthType.Bearer)
   @ApiOperation({ summary: 'Get all reservations' })
   findAll() {
     return this.reservationsService.findAll();
   }
 
   @Get(':id')
+  @Auth(AuthType.Bearer)
   @ApiOperation({ summary: 'Get reservation by ID' })
   @ApiParam({
     name: 'id',
@@ -44,6 +52,7 @@ export class ReservationsController {
   }
 
   @Patch(':id')
+  @Auth(AuthType.Bearer)
   @ApiOperation({ summary: 'Update reservation' })
   @ApiParam({
     name: 'id',
@@ -57,6 +66,7 @@ export class ReservationsController {
   }
 
   @Delete(':id')
+  @Auth(AuthType.Bearer)
   @ApiOperation({ summary: 'Delete reservation' })
   @ApiParam({
     name: 'id',
